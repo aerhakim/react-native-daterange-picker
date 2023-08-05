@@ -15,7 +15,8 @@ import Header from "./components/Header";
 import { height, width } from "./modules";
 import chevronL from "./assets/chevronL.png";
 import chevronR from "./assets/chevronR.png";
-
+import momen from "moment/moment";
+import Toast from "react-native-root-toast";
 const DateRangePicker = ({
   moment,
   startDate,
@@ -96,13 +97,29 @@ const DateRangePicker = ({
     setIsOpen(true);
   };
 
-  const onClose = () => {
-    setIsOpen(false);
-    setSelecting(false);
-    if (!endDate) {
+  const onClose = (cancelled = false) => {
+    if (cancelled === true) {
+      setIsOpen(false);
+      setSelecting(false);
       onChange({
-        endDate: startDate,
+        endDate: endDate ?? startDate,
+        open: false,
+        cancelled: true,
       });
+    } else {
+      if (endDate != null) {
+        setIsOpen(false);
+        setSelecting(false);
+        onChange({
+          endDate: endDate ?? startDate,
+          open: false,
+          cancelled: false,
+        });
+      } else {
+        Toast.show("Tanggal Selesai Wajib Diisi", {
+          duration: Toast.durations.SHORT,
+        });
+      }
     }
   };
 
@@ -123,8 +140,10 @@ const DateRangePicker = ({
       (_startDate &&
         _endDate &&
         _date.isBetween(_startDate, _endDate, null, "[]")) ||
-      (_startDate && _date.isSame(_startDate, "day")) ||
-      (__date && _date.isSame(__date, "day"))
+      (_startDate && _date.isSame(_startDate, "day")) 
+      // ||
+      // (__date && _date.isSame(__date, "day")) 
+      // || _date.isSame(__date, "day")
     );
   }, []);
 
@@ -251,8 +270,8 @@ const DateRangePicker = ({
         week.push(
           <Day
             key={`day-${i}`}
-            selectedStyle={selectedStyle}
-            selectedTextStyle={selectedTextStyle}
+            selectedStyle={{backgroundColor: '#48b9ef'}}
+            selectedTextStyle={{}}
             disabledStyle={disabledStyle}
             dayStyle={dayStyle}
             dayTextStyle={dayTextStyle}
@@ -316,7 +335,7 @@ const DateRangePicker = ({
           children
         ) : (
           <View>
-            <Text>Click me to show date picker</Text>
+            {/* <Text>Click me to show date picker</Text> */}
           </View>
         )}
       </TouchableWithoutFeedback>
@@ -394,6 +413,77 @@ const DateRangePicker = ({
                 )}
               </View>
             )}
+            <View
+              style={[
+                mergedStyles.buttonContainer,
+                {
+                  flexDirection: "row",
+                  justifyContent: "space-around",
+                  width: "100%",
+                },
+              ]}
+            >
+              <View>
+                <Text>Mulai</Text>
+                <Text>
+                  {startDate != null
+                    ? momen(startDate).format("l")
+                    : "Pilih Tanggal Mulai"}
+                </Text>
+              </View>
+              <View>
+                <Text>Selesai</Text>
+                <Text>
+                  {endDate != null
+                    ? momen(endDate).format("l")
+                    : "Pilih Tanggal Selesai"}
+                </Text>
+              </View>
+            </View>
+            <View style={mergedStyles.buttonContainer}>
+              <TouchableOpacity
+                style={{
+                  borderRadius: 8,
+                  borderWidth: 1,
+                  borderColor: "#3b83f7",
+                  padding: 5,
+                  width: 80,
+                  height: 40,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+                onPress={() => onClose(true)}
+              >
+                <Text
+                  style={{
+                    color: "#3b83f7",
+                  }}
+                >
+                  Cancel
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  backgroundColor: "#3b83f7",
+                  borderRadius: 8,
+                  marginLeft: 10,
+                  padding: 5,
+                  width: 80,
+                  height: 40,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+                onPress={() => onClose()}
+              >
+                <Text
+                  style={{
+                    color: "white",
+                  }}
+                >
+                  Apply
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </View>
@@ -495,9 +585,10 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "flex-end",
+    paddingHorizontal: 20,
     alignItems: "center",
-    marginBottom: 10,
+    marginBottom: 20,
   },
   monthButtons: {
     width: 32,
