@@ -1,6 +1,6 @@
-# Forked From react-native-daterange-picker
+# @arhakim/react-native-daterange-picker
 
-Customize React Native Date Range Picker for My Personal Project
+Customize React Native Date Range Picker for My Personal Project forked from react-native-daterange-picker
 
 A React Native component for picking date ranges or single dates.
 
