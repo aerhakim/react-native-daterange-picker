@@ -1,4 +1,4 @@
-# Fork From react-native-daterange-picker
+# Forked From react-native-daterange-picker
 
 Customize React Native Date Range Picker for My Personal Project
 
