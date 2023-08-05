@@ -1,6 +1,6 @@
 {
   "name": "@arhakim/react-native-daterange-picker",
-  "version": "1.5.8",
+  "version": "1.5.9",
   "description": "Custom for my personal project: Date range and single date picker for React Native (Supports iOS and Android) Forked from react-native-daterange-picker",
   "main": "src/index.js",
   "scripts": {},
