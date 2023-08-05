@@ -1,4 +1,6 @@
-# react-native-daterange-picker
+# Fork From react-native-daterange-picker
+
+Customize React Native Date Range Picker for PT. Royal D'Paragon
 
 A React Native component for picking date ranges or single dates.
 
